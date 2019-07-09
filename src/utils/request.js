@@ -33,5 +33,5 @@ request.interceptors.response.use(function (response) {
   // Do something with response error
   return Promise.reject(error)
 })
-
+// 在哪儿用 在哪儿import  要么把它挂载到Vue 的prototype原型对象中
 export default request
