@@ -17,7 +17,7 @@ import request from '@/utils/request'
 //     }
 //   })
 // }
-// 参数解构 data期望是个对象
+// 参数解构 data期望是个对象 发请求的人得 得到request的返回值 调login得得到请求的结果
 // export const login = ({ mobile, code }) => {
 //     return request({
 //       method: 'POST',

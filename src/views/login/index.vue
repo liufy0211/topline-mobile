@@ -23,13 +23,15 @@
       </van-cell-group>
       <div class="login-btn-box">
         <!-- 不要写行内样式 写行内样式不转rem 要写在style节点上 -->
-        <van-button type="info" class="login-btn">登录</van-button>
+        <van-button type="info" class="login-btn" @click.prevent="handleLogin">登录</van-button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import { login } from '@/api/user'
+
 export default {
   name: 'LoginIndex',
   data () {
@@ -37,6 +39,17 @@ export default {
       user: {
         mobile: '',
         code: ''
+      }
+    }
+  },
+  methods: {
+    async handleLogin () {
+      try {
+        const res = await login(this.user)
+        console.log(res)
+      } catch (err) {
+        console.log(err)
+        console.log('登录失败')
       }
     }
   }
