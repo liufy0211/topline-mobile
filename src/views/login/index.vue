@@ -45,8 +45,17 @@ export default {
   methods: {
     async handleLogin () {
       try {
-        const res = await login(this.user)
-        console.log(res)
+        const data = await login(this.user)
+
+        this.$store.commit('setUser', data)
+        /*
+          这里先简单粗暴的跳转到首页
+          真实的业务处理成跳转到之前过来的页面
+        */
+        this.$router.push({
+          name: 'home'
+        })
+        // console.log(res)
       } catch (err) {
         console.log(err)
         console.log('登录失败')
