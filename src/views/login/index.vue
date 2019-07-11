@@ -23,7 +23,13 @@
       </van-cell-group>
       <div class="login-btn-box">
         <!-- 不要写行内样式 写行内样式不转rem 要写在style节点上 -->
-        <van-button type="info" class="login-btn" @click.prevent="handleLogin">登录</van-button>
+        <van-button
+          type="info"
+          class="login-btn"
+          loading-text="登录中"
+          @click.prevent="handleLogin"
+          :loading="loginLoading"
+        >登录</van-button>
       </div>
     </form>
   </div>
@@ -36,14 +42,16 @@ export default {
   name: 'LoginIndex',
   data () {
     return {
-      user: {
+      user: { // 提交登录的表单数据
         mobile: '',
         code: ''
-      }
+      },
+      loginLoading: false // 控制登录按钮的 loading 状态
     }
   },
   methods: {
     async handleLogin () {
+      this.loginLoading = true
       try {
         const data = await login(this.user)
 
@@ -52,14 +60,15 @@ export default {
           这里先简单粗暴的跳转到首页
           真实的业务处理成跳转到之前过来的页面
         */
-        this.$router.push({
-          name: 'home'
-        })
+        // this.$router.push({
+        //   name: 'home'
+        // })
         // console.log(res)
       } catch (err) {
         console.log(err)
         console.log('登录失败')
       }
+      this.loginLoading = false
     }
   }
 }
