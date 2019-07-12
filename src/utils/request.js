@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 
 /*
   axios.create 用于创建一个axios实例，该实例和axios的功能是一摸一样的
@@ -20,6 +21,13 @@ const request = axios.create({
 // Add a request interceptor
 request.interceptors.request.use(function (config) {
   // Do something before request is sent
+
+  // 如果已登录，则为请求接口统一添加用户 token
+  const { user } = store.state
+  if (user) {
+    config.headers.Authorization = `Bearer ${user.token}`
+  }
+  // return config 是run许请求发送的开关 我们可以在这之前进行一些业务逻辑操作 config本次请求相关的配置对象
   return config
 }, function (error) {
   // Do something with request error
