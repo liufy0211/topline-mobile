@@ -100,6 +100,7 @@ export default {
       })
       this.channels = channels
     },
+    // 上拉加载更多，push 数据
     onLoad () {
       console.log('onLoad') // 一上来onload 好几次 ，当发现占不满一屏的时候，会再去onload 它自动的
       // 异步更新数据  每onLoad一下 就要加载数据 往list里面 push 数据
@@ -117,6 +118,7 @@ export default {
         }
       }, 1000)
     },
+    // 下拉刷新，如果有新数据，则是重置列表数据
     onRefresh () {
       // 发请求加载数据，加载完把loading给取消掉
       setTimeout(() => {
