@@ -7,7 +7,7 @@
     <van-tabs class="channel-tabs" v-model="activeChannelIndex">
       <!-- 上面是标签栏，下面是具体的标签 -->
       <!-- 这种元素不受作用域影响 -->
-      <div slot="nav-right" class="wap-nav">
+      <div slot="nav-right" class="wap-nav" @click="isChannelShow = true">
         <van-icon name="wap-nav"/>
       </div>
       <van-tab
@@ -60,7 +60,11 @@
     </van-tabbar>
     <!-- /底部导航 -->
     <!--频道组件 这是个弹框写到哪儿里都行 在用的时候可以大写也可以小写-->
-    <home-channel></home-channel>
+    <!--
+      :value="isChannelShow"
+      @input="isChannelShow = $event"
+     -->
+    <home-channel v-model="isChannelShow" />
     <!--频道组件 -->
   </div>
 </template>
@@ -84,7 +88,8 @@ export default {
       loading: false,
       finished: false,
       pullRefreshLoading: false,
-      channels: [] // 存储频道列表
+      channels: [], // 存储频道列表
+      isChannelShow: false // 控制频道面板的显示状态
     }
   },
   computed: {
