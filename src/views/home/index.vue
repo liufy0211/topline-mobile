@@ -54,6 +54,9 @@
       <van-tabbar-item icon="setting-o" to="my">我的</van-tabbar-item>
     </van-tabbar>
     <!-- /底部导航 -->
+    <!--频道组件 这是个弹框写到哪儿里都行 在用的时候可以大写也可以小写-->
+    <home-channel></home-channel>
+    <!--频道组件 -->
   </div>
 </template>
 
@@ -61,8 +64,14 @@
 import { setTimeout } from 'timers'
 import { getUserChannels } from '@/api/channel'
 import { getArticles } from '@/api/article'
+// 加载组件的时候 组件的名不要使用驼峰命名法 要么帕斯卡首字母都大写 要么全小写多个单词用段横杠链接起来
+import HomeChannel from './components/channel'
+
 export default {
   name: 'HomeIndex',
+  components: {
+    HomeChannel
+  },
   data () {
     return {
       activeChannelIndex: 0,
@@ -82,19 +91,31 @@ export default {
     }
   },
 
+  // 我们可以在组件中监视一些数据，根据数据的改变，执行一些业务逻辑操作
   watch: {
-    // 监视容器中的user用户
+    // 监视容器中的user状态（用户）只要user发生改变，那么就重新获取频道列表
     // 记住：凡是能this. 点儿出来的成员度可以直接在这里监视
     // 由于路由缓存了，所以这里监视用户的登录状态，如果登录了。则加载用户的频道列表
     async '$store.state.user' () {
+      console.log('user 改变了')
       // 重新加载用户频道列表
-      this.loadChannels()
+      await this.loadChannels()
+      // 由于重新加载了频道数据，所以文章内容也被清空了 而且上拉加载更多的 onLoad没有主动触发
+      // 我们这里可以手动触发上拉加载更多的onLoad
       // 频道数据改变，重新加载当前激活频道的数据
       // 只需将上拉加载更多设置为 true，它就会自动去调用 onLoad 请求函数
-      this.activeChannel.upPullLoading = true
+      // this.activeChannel.upPullLoading = true
+
+      this.activeChannel.upLoading = true
+      // 正常的话上面设置 loading 之后，组件会自动去 onLoad
+      // 这里它没有自己 onLoad，那我们就自己手动的 onLoad 以下。
+      this.onLoad()
     }
   },
   created () {
+    // 切换页面 实际上是路由组件改变了 对vue 来说 默认的方式是销毁再重建，也就是它的实例生命周期再走一遍
+    console.log('组件重新 created 渲染了')
+    // 加载频道列表
     this.loadChannels()
   },
 
