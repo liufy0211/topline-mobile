@@ -5,6 +5,11 @@
     <!-- /头部 -->
     <!-- 频道标签 -->
     <van-tabs class="channel-tabs" v-model="activeChannelIndex">
+      <!-- 上面是标签栏，下面是具体的标签 -->
+      <!-- 这种元素不受作用域影响 -->
+      <div slot="nav-right" class="wap-nav">
+        <van-icon name="wap-nav"/>
+      </div>
       <van-tab
         :title="channelItem.name"
         v-for="channelItem in channels"
@@ -258,5 +263,13 @@ export default {
 }
 .channel-tabs /deep/ .van-tabs__content {
   margin-top: 92px;
+}
+.channel-tabs .wap-nav {
+  position: sticky;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  opacity: .7;
 }
 </style>
