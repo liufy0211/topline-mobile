@@ -112,9 +112,21 @@ export default {
     },
     // 上拉加载更多，push 数据
     async onLoad () {
+      await this.$sleep(800)
+
       console.log('onLoad') // 一上来onload 好几次 ，当发现占不满一屏的时候，会再去onload 它自动的
       let data = []
       data = await this.loadArticles()
+
+      // 如果没有 pre_timestamp 并且数组是空的，则意味着没有数据了
+      if (!data.pre_timestamp && !data.results.length) {
+        // 设置该频道数据已加载完毕,组件会自动给出提示，并且不再onLoad
+        this.activeChannel.upPullFinished = true
+        // 取消 loading
+        this.activeChannel.upPullLoading = false
+        // 代码不要往后继续执行了
+        return
+      }
       // pre_timestamp 下一页的页码 （下一页的数据，也就是上次时间点推荐的数据）每一次会告诉你上一次推荐数据标志 上一次最新的数据在pre_timestamp
       // results 文章列表
       // console.log(data)
