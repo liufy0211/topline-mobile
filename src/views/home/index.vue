@@ -44,8 +44,31 @@
           <van-cell
             v-for="articleItem in channelItem.articles"
             :key="articleItem.art_id"
-            :title="articleItem.title"
-          />
+            :title="articleItem.title">
+            <!-- p 标签会作为它的label内容 我们可以在里面写更多的标签定制样式了 -->
+            <p slot="label">
+              <span>{{ articleItem.aut_name}}</span>
+              &nbsp;
+              <span>{{ articleItem.comm_count }}</span>
+              &nbsp;
+              <!-- <span>{{ relativeTime(articleItem.pubdate) }}</span> -->
+              <!-- 前面是数据 后面也是个方法 但不是methods 叫做过滤器 -->
+              <!--
+                | relativeTime 就是在调用过滤器函数
+                过滤器函数接收的参数就是 | 前面的articleItem.pubdate
+                过滤器函数的返回值会输出到这里
+               -->
+               <!--
+                  过滤器说白了就是函数，在模板中调用函数的另一种方式
+                  一般用于格式化输出内容，其中不会有太多业务逻辑，一般都是对字符串的格式化处理
+                  过滤器可以定义到：
+                    全局：Vue.filter('过滤器名称')，可以在任何组件中使用
+                    局部：filters 选项，只能在组件内部使用
+                  你给它一种数据 它给你格式化成令一种数据
+                -->
+              <span>{{ articleItem.pubdate | relativeTime }}</span>
+            </p>
+          </van-cell>
         </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -85,6 +108,7 @@ import { getUserChannels } from '@/api/channel'
 import { getArticles } from '@/api/article'
 // 加载组件的时候 组件的名不要使用驼峰命名法 要么帕斯卡首字母都大写 要么全小写多个单词用段横杠链接起来
 import HomeChannel from './components/channel'
+// console.log(dayjs().from(dayjs('2019-7-11 09:15:50'))) // 相对当前时间计算相对时间
 
 export default {
   name: 'HomeIndex',
@@ -102,6 +126,13 @@ export default {
       isChannelShow: false // 控制频道面板的显示状态
     }
   },
+  //   | 前面是传参 后面是调filters方法  把|前面数据经过这个函数，处理成另一种表现的方式
+  // filters: {
+  //   relativeTime (val) {
+  //     // console.log(val)
+  //     return dayjs().from(dayjs(val))
+  //   }
+  // },
   computed: {
     /*
       当前激活的频道
