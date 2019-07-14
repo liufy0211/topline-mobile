@@ -63,11 +63,16 @@
     <!--
       :value="isChannelShow"
       @input="isChannelShow = $event"
+      .sync 修饰符会自动监听一个事件：
+      @update:user-channels="channels = $event"
+      简单来说，给 props 数组加 .sync 其实就是 v-model 的作用
+      只不过一个组件只能有一个 v-model
      -->
      <!-- 属性传值不能写驼峰命名法  activeChannelIndex 首页中高亮的标签索引-->
+     <!--  @update-user-channels="channels.push($event)" 通过事件传参 所以要监听一个事件 -->
     <home-channel
       v-model="isChannelShow"
-      :user-channels="channels"
+      :user-channels.sync="channels"
       :active-index="activeChannelIndex"
     />
     <!--频道组件 -->

@@ -139,7 +139,10 @@ export default {
       //    但是引用类型除外
       //    即便是这样：也最好不要利用这个特点
       // 建议做法就是将数据传递给父组件，让组件自己去修改
-      this.userChannels.push(item)
+      // this.userChannels.push(item)
+      const channels = this.userChannels.slice(0) // 相当于备份了个新数组
+      channels.push(item)
+      this.$emit('update:user-channels', channels)
     }
     // handleInput (e) {
     //   console.log('handleInput => s', e)
