@@ -36,7 +36,8 @@
         <van-grid-item
           v-for="(item, index) in userChannels"
           :key="item.id"
-          text="文字">
+          @click="handleUserChannelClick(item, index)"
+        >
           <!-- 选中标签有它的索引 把索引传下来 遍历的时候判断一下，如果当前遍历的index和你激活的标签索引一样 获取高亮的样式 -->
           <span
             class="text"
@@ -164,11 +165,31 @@ export default {
         // 注意：本地存储数据无法像 js 数据变量去修改，要想改变只能完全重写
         window.localStorage.setItem('channels', JSON.stringify(channels))
       }
-    }
+    },
     // handleInput (e) {
     //   console.log('handleInput => s', e)
     //   this.$emit('input', e)
     // }
+    handleUserChannelClick (item, index) {
+      // 如果是非编辑状态，则是切换 tab 显示
+      if (!this.isEdit) {
+        this.$emit('update:active-index', index)
+        // 切换到home页面
+        this.$emit('input', false)
+        return
+      }
+      // 如果是编辑状态，则是删除操作
+      const channels = this.userChannels.slice(0)
+      channels.splice(index, 1)
+      this.$emit('update:user-channels', channels)
+      const { user } = this.$store.state
+      // 如果用户登录登录，则请求删除
+      if (user) {
+        return
+      }
+      // 如果用户没有登录， 则将数据保存到本地存储
+      window.localStorage.setItem('channels', JSON.stringify(channels))
+    }
   }
 }
 </script>
