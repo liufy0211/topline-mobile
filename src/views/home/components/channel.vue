@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
 export default {
   name: 'HomeChannel',
   props: {
@@ -95,9 +96,23 @@ export default {
   data () {
     return {
       // 组件外部控制这个show
+      getAllChannels: []
     }
   },
+
+  created () {
+    this.loadAllChannels()
+  },
   methods: {
+    async loadAllChannels () {
+      try {
+        const data = await getAllChannels()
+        this.allChannels = data.channels
+        console.log(data)
+      } catch (err) {
+        console.loh()
+      }
+    }
     // handleInput (e) {
     //   console.log('handleInput => s', e)
     //   this.$emit('input', e)
