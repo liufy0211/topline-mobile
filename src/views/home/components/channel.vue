@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getAllChannels, deleteUserChannel } from '@/api/channel'
+import { getAllChannels, deleteUserChannel, updateUserChannel } from '@/api/channel'
 export default {
   name: 'HomeChannel',
   props: {
@@ -140,7 +140,7 @@ export default {
       }
     },
 
-    handleAddChannel (item) {
+    async handleAddChannel (item) {
       // console.log(item)
       // userChannels是父组件传下来的 原则不要在组件外面修改组件的状态，普通类型改不了，但是引用类型可以改
 
@@ -159,6 +159,10 @@ export default {
 
       // 如果登录已登录，则请求添加用户频道
       if (user) {
+        await updateUserChannel([{
+          id: item.id,
+          seq: channels.length - 1 // 序号
+        }])
       } else {
         // 如果没有登录，则添加到本地存储
         // 没有就创建，有的直接覆盖
