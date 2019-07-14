@@ -12,8 +12,17 @@ import 'amfe-flexible'
 /**
  * 现在我们简单粗暴全引进来，方便使用
  */
-import Vant from 'vant'
+
+// import Vant from 'vant'
+// import { Lazyload } from 'vant'
+
+// 等价于上面的两句代码写法
+import Vant, { Lazyload } from 'vant'
+
 import 'vant/lib/index.css'
+
+// 注册 Vant 的图片懒加载自定义指令
+Vue.use(Lazyload)
 
 // 注册一个全局过滤器：处理相对时间
 Vue.filter('relativeTime', relativeTime)

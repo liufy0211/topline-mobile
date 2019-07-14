@@ -46,28 +46,38 @@
             :key="articleItem.art_id"
             :title="articleItem.title">
             <!-- p 标签会作为它的label内容 我们可以在里面写更多的标签定制样式了 -->
-            <p slot="label">
-              <span>{{ articleItem.aut_name}}</span>
-              &nbsp;
-              <span>{{ articleItem.comm_count }}</span>
-              &nbsp;
-              <!-- <span>{{ relativeTime(articleItem.pubdate) }}</span> -->
-              <!-- 前面是数据 后面也是个方法 但不是methods 叫做过滤器 -->
-              <!--
-                | relativeTime 就是在调用过滤器函数
-                过滤器函数接收的参数就是 | 前面的articleItem.pubdate
-                过滤器函数的返回值会输出到这里
-               -->
-               <!--
-                  过滤器说白了就是函数，在模板中调用函数的另一种方式
-                  一般用于格式化输出内容，其中不会有太多业务逻辑，一般都是对字符串的格式化处理
-                  过滤器可以定义到：
-                    全局：Vue.filter('过滤器名称')，可以在任何组件中使用
-                    局部：filters 选项，只能在组件内部使用
-                  你给它一种数据 它给你格式化成令一种数据
+            <div slot="label">
+              <template v-if="articleItem.cover.type">
+                <van-grid :border="false" :column-num="3">
+                  <van-grid-item v-for="(img, index) in articleItem.cover.images" :key="index">
+                    <!-- 图片标签是个组件 不是普通的images 用它的组件有个好处，它能配置懒加载 当滚动到可视区域时 才请求加载图片-->
+                    <van-image :src="img" lazy-load />
+                  </van-grid-item>
+                </van-grid>
+              </template>
+              <p>
+                <span>{{ articleItem.aut_name}}</span>
+                &nbsp;
+                <span>{{ articleItem.comm_count }}</span>
+                &nbsp;
+                <!-- <span>{{ relativeTime(articleItem.pubdate) }}</span> -->
+                <!-- 前面是数据 后面也是个方法 但不是methods 叫做过滤器 -->
+                <!--
+                  | relativeTime 就是在调用过滤器函数
+                  过滤器函数接收的参数就是 | 前面的articleItem.pubdate
+                  过滤器函数的返回值会输出到这里
                 -->
-              <span>{{ articleItem.pubdate | relativeTime }}</span>
-            </p>
+                <!--
+                    过滤器说白了就是函数，在模板中调用函数的另一种方式
+                    一般用于格式化输出内容，其中不会有太多业务逻辑，一般都是对字符串的格式化处理
+                    过滤器可以定义到：
+                      全局：Vue.filter('过滤器名称')，可以在任何组件中使用
+                      局部：filters 选项，只能在组件内部使用
+                    你给它一种数据 它给你格式化成令一种数据
+                  -->
+                <span>{{ articleItem.pubdate | relativeTime }}</span>
+              </p>
+            </div>
           </van-cell>
         </van-list>
         </van-pull-refresh>
