@@ -57,11 +57,11 @@
       </div>
       <van-grid class="channel-content" :gutter="10" clickable>
         <van-grid-item
-          v-for="value in 8"
-          :key="value"
-          text="文字">
+          v-for="item in recommendChannels"
+          :key="item.id"
+        >
           <div class="info">
-            <span class="text">文字</span>
+            <span class="text">{{ item.name }}</span>
           </div>
         </van-grid-item>
       </van-grid>
@@ -97,6 +97,19 @@ export default {
     return {
       // 组件外部控制这个show
       getAllChannels: []
+    }
+  },
+  // 通过计算属性进行筛选，在这里返回筛选之后的数据
+  // 为什么要用计算属性，不管是增加还是删除 操作的是userChannels 相当于穿梭已经实现了，计算属性都能响应它的变化，只要userChannels发生改变，计算属性重新运行重新计算
+  computed: {
+    /**
+     * 该计算属性用于处理获取推荐数据（也就是不包含用户频道列表的其它所有频道列表）
+     */
+    recommendChannels () {
+      // 拿到所有重复的数据 id （把用户的id拿出来）map 遍历数据 map会在内部创建一个新数组 => item.id 表示 return item.id 每遍历一次就往新数组push一个
+      // 我提取了一个新的数组 新数组存储了userChannels里每个元素的id
+      const duplicates = this.userChannels.map(item => item.id)
+      return this.allChannels.filter(item => !duplicates.includes(item.id))
     }
   },
 
