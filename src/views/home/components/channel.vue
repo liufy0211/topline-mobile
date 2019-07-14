@@ -28,7 +28,8 @@
             type="danger"
             plain
             size="mini"
-          >编辑</van-button>
+            @click="isEdit = !isEdit"
+          >{{ isEdit ? '完成' : '编辑' }}</van-button>
         </div>
       </div>
       <van-grid class="channel-content" :gutter="10" clickable>
@@ -39,9 +40,9 @@
           <!-- 选中标签有它的索引 把索引传下来 遍历的时候判断一下，如果当前遍历的index和你激活的标签索引一样 获取高亮的样式 -->
           <span
             class="text"
-            :class="{ active: index === activeIndex }"
+            :class="{ active: index === activeIndex && !isEdit}"
           >{{ item.name }}</span>
-          <!-- <van-icon class="close-icon" name="close" /> -->
+          <van-icon class="close-icon"  v-show="isEdit" name="close" />
         </van-grid-item>
       </van-grid>
     </div>
@@ -97,7 +98,8 @@ export default {
   data () {
     return {
       // 组件外部控制这个show
-      getAllChannels: []
+      getAllChannels: [],
+      isEdit: false
     }
   },
   // 通过计算属性进行筛选，在这里返回筛选之后的数据
