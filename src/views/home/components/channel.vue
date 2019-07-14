@@ -122,6 +122,14 @@ export default {
     async loadAllChannels () {
       try {
         const data = await getAllChannels()
+        // 将获取到的频道数据统一处理成我们需要的数据格式
+        data.channels.forEach(item => {
+          item.articles = [] // 用来存储当前文章的列表 item 是一个一个的频道对象
+          item.timestamp = Date.now() // 存储下一页数据的时间戳
+          item.downPullLoading = false // 控制当前频道的下拉刷新 loading 状态
+          item.upPullLoading = false // 控制当前频道的上拉加载等多的 loading状态
+          item.upPullFinished = false // 控制当前频道数据是否加载完毕
+        })
         this.allChannels = data.channels
         // console.log(data)
       } catch (err) {
