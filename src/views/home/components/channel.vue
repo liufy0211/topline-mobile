@@ -33,10 +33,14 @@
       </div>
       <van-grid class="channel-content" :gutter="10" clickable>
         <van-grid-item
-          v-for="item in userChannels"
+          v-for="(item, index) in userChannels"
           :key="item.id"
           text="文字">
-          <span class="text">{{ item.name }}</span>
+          <!-- 选中标签有它的索引 把索引传下来 遍历的时候判断一下，如果当前遍历的index和你激活的标签索引一样 获取高亮的样式 -->
+          <span
+            class="text"
+            :class="{ active: index === activeIndex }"
+          >{{ item.name }}</span>
           <!-- <van-icon class="close-icon" name="close" /> -->
         </van-grid-item>
       </van-grid>
@@ -82,6 +86,10 @@ export default {
         return []
       }
       // default: () => [] 或者可以简写
+    },
+    activeIndex: {
+      type: Number,
+      default: 0
     }
   },
   data () {

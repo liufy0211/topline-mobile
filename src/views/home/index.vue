@@ -64,9 +64,11 @@
       :value="isChannelShow"
       @input="isChannelShow = $event"
      -->
+     <!-- 属性传值不能写驼峰命名法  activeChannelIndex 首页中高亮的标签索引-->
     <home-channel
       v-model="isChannelShow"
       :user-channels="channels"
+      :active-index="activeChannelIndex"
     />
     <!--频道组件 -->
   </div>
