@@ -59,6 +59,7 @@
         <van-grid-item
           v-for="item in recommendChannels"
           :key="item.id"
+          @click="handleAddChannel(item)"
         >
           <div class="info">
             <span class="text">{{ item.name }}</span>
@@ -104,6 +105,7 @@ export default {
   computed: {
     /**
      * 该计算属性用于处理获取推荐数据（也就是不包含用户频道列表的其它所有频道列表）
+     * 计算属性其实也拥有 watch 的功能，但它的作用是用于当数据改变之后重新计算返回一些数据供我们使用
      */
     recommendChannels () {
       // 拿到所有重复的数据 id （把用户的id拿出来）map 遍历数据 map会在内部创建一个新数组 => item.id 表示 return item.id 每遍历一次就往新数组push一个
@@ -121,10 +123,23 @@ export default {
       try {
         const data = await getAllChannels()
         this.allChannels = data.channels
-        console.log(data)
+        // console.log(data)
       } catch (err) {
-        console.loh()
+        console.log(err)
       }
+    },
+
+    handleAddChannel (item) {
+      // console.log(item)
+      // userChannels是父组件传下来的 原则不要在组件外面修改组件的状态，普通类型改不了，但是引用类型可以改
+
+      // userChannels 是 props 数据
+      // props 数据有个原则：单向数据流
+      //    数据只受父组件影响，但是反之不会
+      //    但是引用类型除外
+      //    即便是这样：也最好不要利用这个特点
+      // 建议做法就是将数据传递给父组件，让组件自己去修改
+      this.userChannels.push(item)
     }
     // handleInput (e) {
     //   console.log('handleInput => s', e)
