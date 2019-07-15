@@ -109,6 +109,23 @@
       :active-index.sync="activeChannelIndex"
     />
     <!--频道组件 -->
+
+    <!-- 更多操作弹框 -->
+    <van-dialog v-model="isMoreActionShow" :showConfirmButton="false">
+      <van-cell-group v-if="!toggleRubbish">
+        <van-cell title="不感兴趣" />
+        <van-cell title="反馈垃圾内容" is-link @click="toggleRubbish = true" />
+        <van-cell title="反馈垃圾内容" />
+      </van-cell-group>
+      <van-cell-group v-else>
+        <van-cell icon="arrow-left" @click="toggleRubbish = false" />
+        <van-cell title="标题夸张" />
+        <van-cell title="低速色情" />
+        <van-cell title="错别字多" />
+        <van-cell title="旧闻重复" />
+      </van-cell-group>
+    </van-dialog>
+    <!-- /更多操作弹框 -->
   </div>
 </template>
 
@@ -133,7 +150,9 @@ export default {
       finished: false,
       pullRefreshLoading: false,
       channels: [], // 存储频道列表
-      isChannelShow: false // 控制频道面板的显示状态
+      isChannelShow: false, // 控制频道面板的显示状态
+      isMoreActionShow: true, // 控制更多操作弹框面板
+      toggleRubbish: false // 控制反馈垃圾弹框内容的显示
     }
   },
   //   | 前面是传参 后面是调filters方法  把|前面数据经过这个函数，处理成另一种表现的方式
