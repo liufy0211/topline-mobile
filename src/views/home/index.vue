@@ -76,8 +76,10 @@
                     你给它一种数据 它给你格式化成令一种数据
                   -->
                 <span>{{ articleItem.pubdate | relativeTime }}</span>
-              </p>
-            </div>
+                </p>
+              </div>
+                <!-- 这里更多操作的点击按钮 -->
+              <van-icon class="close" name="close" @click="handleShowMoreAction(articleItem)" />
           </van-cell>
         </van-list>
         </van-pull-refresh>
@@ -113,7 +115,7 @@
     <!-- 更多操作弹框 -->
     <van-dialog v-model="isMoreActionShow" :showConfirmButton="false">
       <van-cell-group v-if="!toggleRubbish">
-        <van-cell title="不感兴趣" />
+        <van-cell title="不感兴趣" @click="handleDislick"/>
         <van-cell title="反馈垃圾内容" is-link @click="toggleRubbish = true" />
         <van-cell title="反馈垃圾内容" />
       </van-cell-group>
@@ -151,8 +153,9 @@ export default {
       pullRefreshLoading: false,
       channels: [], // 存储频道列表
       isChannelShow: false, // 控制频道面板的显示状态
-      isMoreActionShow: true, // 控制更多操作弹框面板
-      toggleRubbish: false // 控制反馈垃圾弹框内容的显示
+      isMoreActionShow: false, // 控制更多操作弹框面板
+      toggleRubbish: false, // 控制反馈垃圾弹框内容的显示
+      currentArticle: null // 存储当前操作更多的文章
     }
   },
   //   | 前面是传参 后面是调filters方法  把|前面数据经过这个函数，处理成另一种表现的方式
@@ -320,6 +323,17 @@ export default {
         withTop: 1 // 是否包含置顶数据
       })
       return data
+    },
+    handleShowMoreAction (item) {
+      // 将点击操作更多的文章存储起来，用于后续使用
+      this.currentArticle = item
+
+      // 显示弹框
+      this.isMoreActionShow = true
+    },
+    async handleDislick () {
+      // 拿到操作的文章 id
+      // 请求完成操作
     }
   }
 }
@@ -346,5 +360,10 @@ export default {
   align-items: center;
   background: #fff;
   opacity: .7;
+}
+.close {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 </style>
