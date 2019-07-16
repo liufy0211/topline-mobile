@@ -32,6 +32,7 @@
 
 <script>
 import { getSuggestion } from '@/api/search'
+import { debounce } from 'lodash'
 export default {
   name: 'SearchIndex',
   data () {
@@ -42,7 +43,11 @@ export default {
   },
   // 监视它 当它改变就发请求 newVal 当前最新值 oldVal 变化之前的值
   watch: {
-    async searchText (newVal) {
+    // debounce 接收两个参数
+    // 第一个参数： 执行你的业务逻辑的参数函数
+    // 第二个参数： 防抖时间
+    // 当你同一时间调用频率过快，只有挺下来经过指定的时间才会来调用
+    searchText: debounce(async function (newVal) {
       newVal = newVal.trim() // 去除首位空格
 
       // 如果数据为空，则什么都不做
@@ -53,7 +58,7 @@ export default {
       const data = await getSuggestion(newVal)
       // console.log(data)
       this.suggestions = data.options
-    }
+    }, 500)
   }
 }
 </script>
