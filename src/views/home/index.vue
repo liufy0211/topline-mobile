@@ -79,6 +79,7 @@
                 </p>
               </div>
                 <!-- 这里更多操作的点击按钮 -->
+                <!-- 当你点x 的时候把 框弹出来 还要记录起当前你点的这个东西 -->
               <van-icon class="close" name="close" @click="handleShowMoreAction(articleItem)" />
           </van-cell>
         </van-list>
@@ -134,7 +135,7 @@
 <script>
 import { setTimeout } from 'timers'
 import { getUserChannels } from '@/api/channel'
-import { getArticles } from '@/api/article'
+import { getArticles, dislikeArticle } from '@/api/article'
 // 加载组件的时候 组件的名不要使用驼峰命名法 要么帕斯卡首字母都大写 要么全小写多个单词用段横杠链接起来
 import HomeChannel from './components/channel'
 // console.log(dayjs().from(dayjs('2019-7-11 09:15:50'))) // 相对当前时间计算相对时间
@@ -333,7 +334,19 @@ export default {
     },
     async handleDislick () {
       // 拿到操作的文章 id
+      const articleId = this.currentArticle.art_id.toString()
       // 请求完成操作
+      await dislikeArticle(articleId)
+      // 隐藏对话框
+      this.isMoreActionShow = false
+      // 当前频道文章列表
+      const articles = this.activeChannel.articles
+      // 找到不喜欢的文章位于文章中的索引
+      // findIndex 是一个数组方法，它会遍历数组，找到满足 item.art_id === articleId 条件的数据 id
+      // 当前元素id 是这个 articleId 嘛？如果是马上返回这个元素对应的索引 如果不是继续遍历
+      const delIndex = articles.findIndex(articleItem => articleItem.art_id.toString() === articleId)
+      // 把本条数据移除
+      articles.splice(delIndex, 1)
     }
   }
 }
