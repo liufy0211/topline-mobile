@@ -37,3 +37,22 @@ export const dislikeArticle = articleId => {
     }
   })
 }
+
+/**
+ * 举报文章
+ */
+export const reportArticle = ({
+  articleId,
+  type, // 举报类型： 0-其他问题，1-标题夸张，2-低俗色情，3-错别字多，4-旧闻重复，5-广告软文，6-内容不实，7-涉嫌违法犯罪，8-侵权'
+  remark // 其他问题 的附加说明
+}) => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/reports',
+    data: {
+      target: articleId,
+      type: Number.parseInt(type),
+      remark
+    }
+  })
+}

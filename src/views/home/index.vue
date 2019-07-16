@@ -115,7 +115,14 @@
     <!--频道组件 -->
 
     <!-- 更多操作弹框 -->
-    <van-dialog v-model="isMoreActionShow" :showConfirmButton="false">
+    <!-- closeOnClickOverlay 点击遮罩时是否关闭弹窗 -->
+     <!-- before-close="handleMoreActionClose" 处理它的关闭 -->
+    <van-dialog
+      v-model="isMoreActionShow"
+      :showConfirmButton="false"
+      closeOnClickOverlay
+      :before-close="handleMoreActionClose"
+    >
       <van-cell-group v-if="!toggleRubbish">
         <van-cell title="不感兴趣" @click="handleDislick"/>
         <van-cell title="反馈垃圾内容" is-link @click="toggleRubbish = true" />
@@ -123,10 +130,12 @@
       </van-cell-group>
       <van-cell-group v-else>
         <van-cell icon="arrow-left" @click="toggleRubbish = false" />
-        <van-cell title="标题夸张" />
-        <van-cell title="低速色情" />
-        <van-cell title="错别字多" />
-        <van-cell title="旧闻重复" />
+        <van-cell
+          v-for="(item) in repotTypes"
+          :key="item.value"
+          :title="item.label"
+          @click="handleReportArticle(item.value)"
+        />
       </van-cell-group>
     </van-dialog>
     <!-- /更多操作弹框 -->
@@ -136,7 +145,7 @@
 <script>
 import { setTimeout } from 'timers'
 import { getUserChannels } from '@/api/channel'
-import { getArticles, dislikeArticle } from '@/api/article'
+import { getArticles, dislikeArticle, reportArticle } from '@/api/article'
 import { addBlacklist } from '@/api/user'
 // 加载组件的时候 组件的名不要使用驼峰命名法 要么帕斯卡首字母都大写 要么全小写多个单词用段横杠链接起来
 import HomeChannel from './components/channel'
@@ -158,7 +167,18 @@ export default {
       isChannelShow: false, // 控制频道面板的显示状态
       isMoreActionShow: false, // 控制更多操作弹框面板
       toggleRubbish: false, // 控制反馈垃圾弹框内容的显示
-      currentArticle: null // 存储当前操作更多的文章
+      currentArticle: null, // 存储当前操作更多的文章
+      repotTypes: [
+        { label: '标题夸张', value: '1' },
+        { label: '低俗色情', value: '2' },
+        { label: '错别字多', value: '3' },
+        { label: '旧闻重复', value: '4' },
+        { label: '广告软文', value: '5' },
+        { label: '内容不实', value: '6' },
+        { label: '涉嫌违法犯罪', value: '7' },
+        { label: '侵权', value: '8' },
+        { label: '其他问题', value: '0' }
+      ]
     }
   },
   //   | 前面是传参 后面是调filters方法  把|前面数据经过这个函数，处理成另一种表现的方式
@@ -353,12 +373,41 @@ export default {
       // 把本条数据移除
       articles.splice(delIndex, 1)
       this.$toast('操作成功')
+      // this.loadChannels()
     },
 
     async handleAddBlacklist () {
       await addBlacklist(this.currentArticle.aut_id)
       this.isMoreActionShow = false
       this.$toast('操作成功')
+    },
+    async handleReportArticle (type) {
+      // console.log(type)
+      try {
+        await reportArticle({
+          articleId: this.currentArticle.art_id.toString(),
+          type,
+          remark: ''
+        })
+        this.isMoreActionShow = false
+        this.$toast('举报成功')
+      } catch (err) {
+        this.$toast('该文章已被举报')
+      }
+    },
+    /*
+      该函数会在关闭对话框的时候被调用
+      我们可以在这里加入一些关闭之前的逻辑
+      如果设置了此函数，那么最后必须手动调用done 才会关闭对话框
+    */
+    handleMoreActionClose (action, done) {
+      // 我们可以在函数里面 统一控制在它关闭之前做的事
+      // 瞬间关闭
+      done()
+      window.setTimeout(() => {
+        // 然后将里面的面板切换为初始状态
+        this.toggleRubbish = false
+      }, 500)
     }
   }
 }
