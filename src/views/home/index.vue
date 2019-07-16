@@ -40,10 +40,11 @@
         >
         <!--
           列表中的内容
+          对于模板中的错误，推荐的调试方法就是：注释排除调试方法
          -->
           <van-cell
             v-for="articleItem in channelItem.articles"
-            :key="articleItem.art_id"
+            :key="articleItem.art_id.toString()"
             :title="articleItem.title">
             <!-- p 标签会作为它的label内容 我们可以在里面写更多的标签定制样式了 -->
             <div slot="label">
@@ -325,8 +326,11 @@ export default {
       })
       return data
     },
+
+    // 处理显示更多操作弹框面板
     handleShowMoreAction (item) {
       // 将点击操作更多的文章存储起来，用于后续使用
+      // 定义一个数据把它存储起来
       this.currentArticle = item
 
       // 显示弹框
