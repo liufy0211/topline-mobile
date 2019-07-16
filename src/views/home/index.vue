@@ -119,7 +119,7 @@
       <van-cell-group v-if="!toggleRubbish">
         <van-cell title="不感兴趣" @click="handleDislick"/>
         <van-cell title="反馈垃圾内容" is-link @click="toggleRubbish = true" />
-        <van-cell title="反馈垃圾内容" />
+        <van-cell title="拉黑作者" @click="handleAddBlacklist" />
       </van-cell-group>
       <van-cell-group v-else>
         <van-cell icon="arrow-left" @click="toggleRubbish = false" />
@@ -137,6 +137,7 @@
 import { setTimeout } from 'timers'
 import { getUserChannels } from '@/api/channel'
 import { getArticles, dislikeArticle } from '@/api/article'
+import { addBlacklist } from '@/api/user'
 // 加载组件的时候 组件的名不要使用驼峰命名法 要么帕斯卡首字母都大写 要么全小写多个单词用段横杠链接起来
 import HomeChannel from './components/channel'
 // console.log(dayjs().from(dayjs('2019-7-11 09:15:50'))) // 相对当前时间计算相对时间
@@ -351,6 +352,13 @@ export default {
       const delIndex = articles.findIndex(articleItem => articleItem.art_id.toString() === articleId)
       // 把本条数据移除
       articles.splice(delIndex, 1)
+      this.$toast('操作成功')
+    },
+
+    async handleAddBlacklist () {
+      await addBlacklist(this.currentArticle.aut_id)
+      this.isMoreActionShow = false
+      this.$toast('操作成功')
     }
   }
 }
