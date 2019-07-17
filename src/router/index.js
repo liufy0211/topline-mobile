@@ -19,6 +19,14 @@ export default new Router({
       name: 'search',
       path: '/search',
       component: () => import('@/views/search')
+    },
+    // 动态路由传参 q 是自己起的名字
+    // this.$router.push('/search/' + q)
+    // this.$router.push('/search/${q}')
+    {
+      name: 'search-result',
+      path: '/search/:q',
+      component: () => import('@/views/search-result')
     }
   ]
 })
