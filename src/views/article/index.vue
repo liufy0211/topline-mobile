@@ -1,10 +1,52 @@
 <template>
   <div class="article-wrap">
-    <AuthInfo />
-    <CommentList />
+    <van-nav-bar
+      title="黑马头条"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.back()"
+    />
+    <h2>文章标题</h2>
+    <AuthInfo class="auth-info"/>
+    <div class="ariticle-content">
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+      <p>hello world</p>
+    </div>
     <MoreAction />
-    <RecommendArticle />
     <RecommendSearch />
+    <RecommendArticle />
+    <CommentList />
     <ReplyList />
     <WriteComment />
   </div>
@@ -32,5 +74,20 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.article-wrap {
+  padding: 20px;
+  .article-title {
+    font-size: 50px;
+    font-weight: 400;
+  }
+  .ariticle-content {
+    font-size: 24px;
+  }
+  .auth-info {
+    position: sticky;
+    top: 0;
+    background: #fff;
+  }
+}
 </style>
