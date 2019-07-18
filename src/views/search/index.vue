@@ -31,16 +31,30 @@
     <van-cell-group v-else>
       <van-cell title="历史记录">
         <van-icon
+          v-show="!isDeleteShow"
           slot="right-icon"
           name="delete"
           style="line-height: inherit;"
+          @click="isDeleteShow=true"
         />
+        <div v-show="isDeleteShow">
+          <span style="margin-right: 10px;" @click="searchHistories = []">全部删除</span>
+          <span @click="isDeleteShow = false">完成</span>
+        </div>
       </van-cell>
       <van-cell
-        v-for="item in searchHistories"
+        v-for="(item, index) in searchHistories"
         :key="item"
         :title="item"
-      />
+      >
+        <van-icon
+          v-show="isDeleteShow"
+          slot="right-icon"
+          name="close"
+          style="line-height: inherit;"
+          @click="searchHistories.splice(index, 1)"
+        />
+      </van-cell>
     </van-cell-group>
     <!-- /历史记录 -->
   </div>
@@ -56,7 +70,8 @@ export default {
     return {
       searchText: '', // 搜索输入的文本
       suggestions: [], // 联想建议
-      searchHistories: JSON.parse(window.localStorage.getItem('search-histories')) // 所搜历史记录
+      searchHistories: JSON.parse(window.localStorage.getItem('search-histories')), // 所搜历史记录
+      isDeleteShow: false
     }
   },
   // 监视它 当它改变就发请求 newVal 当前最新值 oldVal 变化之前的值
@@ -79,7 +94,21 @@ export default {
       const data = await getSuggestion(newVal)
       // console.log(data)
       this.suggestions = data.options
-    }, 500)
+    }, 500),
+    // 由于searchHistories是引用类型 最好用深度监视，当监视到searchHistories改变时，会来调handler
+    searchHistories: {
+      handler () {
+        // 保存搜索历史记录
+        window.localStorage.setItem(
+          'search-histories',
+          JSON.stringify([...new Set(this.searchHistories)])
+        )
+      },
+      deep: true // 建议引用类型数据都配置为深度监视
+    }
+  },
+  decactivated () {
+    this.$destroy()
   },
   methods: {
     hightlight (text, keyword) {
@@ -92,19 +121,15 @@ export default {
         return
       }
 
-      this.searchHistories.push(q)
-      // 保存搜索历史记录
-      window.localStorage.setItem(
-        'search-histories',
-        JSON.stringify([...new Set(this.searchHistories)])
-      )
+      this.searchHistories.unshift(q)
+
       // 跳转到所搜页面
-      // this.$router.push({
-      //   name: 'search-result',
-      //   params: {
-      //     q
-      //   }
-      // })
+      this.$router.push({
+        name: 'search-result',
+        params: {
+          q
+        }
+      })
 
       /*
         var arr = [1,1,2,2,3,2,1,5]
