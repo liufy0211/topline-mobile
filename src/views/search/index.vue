@@ -9,7 +9,9 @@
       />
     </form>
     <!-- 联想建议列表 -->
-    <van-cell-group>
+    <!-- 当文本框为空时，联想建议列表也不展示了 -->
+    <!-- 如果输入框不为零 并且有数据 所以才展示它 -->
+    <van-cell-group v-if="suggestions.length && searchText.length">
       <van-cell
         icon="search"
         v-for="item in suggestions"
@@ -26,7 +28,7 @@
     <!-- /联想建议列表 -->
 
     <!-- 历史记录 -->
-    <!-- <van-cell-group>
+    <van-cell-group v-else>
       <van-cell title="历史记录">
         <van-icon
           slot="right-icon"
@@ -34,7 +36,12 @@
           style="line-height: inherit;"
         />
       </van-cell>
-    </van-cell-group> -->
+      <van-cell
+        v-for="item in searchHistories"
+        :key="item"
+        :title="item"
+      />
+    </van-cell-group>
     <!-- /历史记录 -->
   </div>
 </template>
@@ -47,8 +54,9 @@ export default {
   name: 'SearchIndex',
   data () {
     return {
-      searchText: '',
-      suggestions: []
+      searchText: '', // 搜索输入的文本
+      suggestions: [], // 联想建议
+      searchHistories: JSON.parse(window.localStorage.getItem('search-histories')) // 所搜历史记录
     }
   },
   // 监视它 当它改变就发请求 newVal 当前最新值 oldVal 变化之前的值
@@ -80,12 +88,31 @@ export default {
     },
     handleSearch (q) {
       // console.log(q)
-      this.$router.push({
-        name: 'search-result',
-        params: {
-          q
-        }
-      })
+      if (!q.length) {
+        return
+      }
+
+      this.searchHistories.push(q)
+      // 保存搜索历史记录
+      window.localStorage.setItem(
+        'search-histories',
+        JSON.stringify([...new Set(this.searchHistories)])
+      )
+      // 跳转到所搜页面
+      // this.$router.push({
+      //   name: 'search-result',
+      //   params: {
+      //     q
+      //   }
+      // })
+
+      /*
+        var arr = [1,1,2,2,3,2,1,5]
+        new Set(arr)  // {1,2,3,5}
+        var s = new Set(arr)
+        [...s]
+        [1,2,3,5]
+      */
     }
   }
 }
