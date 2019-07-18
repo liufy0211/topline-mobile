@@ -45,7 +45,9 @@
           <van-cell
             v-for="articleItem in channelItem.articles"
             :key="articleItem.art_id.toString()"
-            :title="articleItem.title">
+            :title="articleItem.title"
+            @click="$router.push({ name: 'article', params:{ articleId: articleItem.art_id }})"
+          >
             <!-- p 标签会作为它的label内容 我们可以在里面写更多的标签定制样式了 -->
             <div slot="label">
               <template v-if="articleItem.cover.type">
