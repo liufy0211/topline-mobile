@@ -78,6 +78,7 @@ export default {
     }
   },
   created () {
+    // console.log(this.$route) query 用来获取？什么什么这样的参数 params 用来获取login/: 这种参数
     this.configFormErrorMessage()
   },
   methods: {
@@ -116,10 +117,17 @@ export default {
           这里先简单粗暴的跳转到首页
           真实的业务处理成跳转到之前过来的页面
         */
-        this.$router.push({
-          name: 'home'
-        })
+        // this.$router.push({
+        //   name: 'home'
+        // })
         // console.log(res)
+
+        // 回到之前的页面
+        // 1.简单粗暴的back(),如果是手机app 完全没问题
+        // 2.使用url 记住来源路径
+        // this.$router.back()
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.push(redirect)
       } catch (err) {
         this.$toast.fail('登录失败')
         console.log(err)

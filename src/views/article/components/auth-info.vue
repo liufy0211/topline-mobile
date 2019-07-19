@@ -32,9 +32,15 @@ export default {
       isFollowLoading: false
     }
   },
-  created () {},
+  created () {
+    // 这是在组件里可以获取$route对象 当前路由相关的一些信息 路径 参数啊
+    console.log(this.$route)
+  },
   methods: {
     async handleFollow () {
+      if (!this.$checkLogin()) {
+        return
+      }
       // 1.校验登录状态
       //  如果登录了，执行关注|取消关注操作
       //  如果没有登录，则提示去登录，登录成功，还得回来这里
