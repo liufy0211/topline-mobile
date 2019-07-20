@@ -1,4 +1,5 @@
 <template>
+<!-- article index.vue用了一次这组件 reply-list.vue 用了一次这组件 -->
   <div>
     <van-list
       v-model="loading"
