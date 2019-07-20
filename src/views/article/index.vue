@@ -15,9 +15,9 @@
     <MoreAction
       :article="article"
     />
-    <RecommendSearch />
-    <RecommendArticle />
-    <CommentList />
+    <!-- <RecommendSearch /> -->
+    <!-- <RecommendArticle /> -->
+    <CommentList :article-id="$route.params.articleId.toString()" />
     <ReplyList />
     <WriteComment />
   </div>
@@ -27,8 +27,8 @@
 import AuthInfo from './components/auth-info'
 import CommentList from './components/comment-list'
 import MoreAction from './components/more-action'
-import RecommendArticle from './components/recommend-article'
-import RecommendSearch from './components/recommend-search'
+// import RecommendArticle from './components/recommend-article'
+// import RecommendSearch from './components/recommend-search'
 import ReplyList from './components/reply-list'
 import WriteComment from './components/write-comment'
 import { getArticleDetail } from '@/api/article'
@@ -39,8 +39,8 @@ export default {
     AuthInfo,
     CommentList,
     MoreAction,
-    RecommendArticle,
-    RecommendSearch,
+    // RecommendArticle,
+    // RecommendSearch,
     ReplyList,
     WriteComment
   },
