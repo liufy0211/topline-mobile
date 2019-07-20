@@ -17,8 +17,15 @@
     />
     <!-- <RecommendSearch /> -->
     <!-- <RecommendArticle /> -->
-    <CommentList :article-id="$route.params.articleId.toString()" />
-    <ReplyList />
+    <CommentList
+      :source="$route.params.articleId.toString()"
+      @is-replylist-show="handleIsReplyListShow"
+    />
+    <!-- 回复列表组件 -->
+    <ReplyList
+      v-model="isReplyListShow"
+      :comment-id="commentId"    />
+    <!-- /回复列表组件 -->
     <WriteComment />
   </div>
 </template>
@@ -59,7 +66,9 @@ export default {
         pubdate: '2018-11-29T15:22:27',
         recomments: [],
         title: '全连接网络到卷积神经网络逐步推导（组图无公式）'
-      }
+      },
+      isReplyListShow: false, // 控制回复组件的显示状态
+      commentId: null // 点击回复的评论id
     }
   },
   created () {
@@ -79,6 +88,10 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    handleIsReplyListShow (id) {
+      this.commentId = id
+      this.isReplyListShow = true
     }
   }
 }

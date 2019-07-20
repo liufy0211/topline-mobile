@@ -27,7 +27,8 @@
           <p>{{ item.content }}</p>
           <p>
             <span>{{ item.pubdate | relativeTime }}</span>
-            <span>回复 {{ item.reply_count }}</span>
+            <!-- 一点回复向父组件发了一个事件 父组件 @is-replylist-show="isReplyListShow = true"监听到了这个事件 监听到以后，让评论显示了 -->
+            <span @click="$emit('is-replylist-show', item.com_id.toString())">回复 {{ item.reply_count }}</span>
           </p>
         </div>
       </van-cell>
@@ -41,11 +42,19 @@ export default {
   name: 'CommentList',
   // dataId 可能是评论的id（评论的评论） 也可能是文章的id（用来获取文章的评论）接口是同一个 内容也是一样的
   props: {
-    articleId: {
-      type: [Number, String]
+    /*
+      数据id 文章id 或是 评论id
+    */
+    source: {
+      type: [Number, String],
+      required: true
     },
-    commentId: {
-      type: [Number, String]
+    /*
+      source 是否是文章，默认当作文章
+    */
+    isArticle: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -65,10 +74,10 @@ export default {
   methods: {
     async onLoad () {
       const data = await getComments({
-        source: this.articleId || this.commentId,
+        source: this.source,
         offset: this.offset,
         limit: this.limit,
-        isArticle: !!this.articleId // 获取文章评论？ 还是获取评论的回复
+        isArticle: this.isArticle // 获取文章评论？ 还是获取评论的回复 ！！this.articleId
       })
       // console.log(data)
       // 如果数组为空，则表示没有数据了
