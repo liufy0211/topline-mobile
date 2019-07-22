@@ -12,15 +12,18 @@
   >
   <!-- ref 有两个作用，一个是获取DOM 一个是获取组件 -->
     <comment-list ref="comment-list" :source="commentId" :isArticle="false" />
+    <write-comment :target="commentId" :article-id="articleId"/>
   </van-popup>
 </template>
 
 <script>
 import CommentList from './comment-list'
+import WriteComment from './write-comment'
 export default {
   name: 'ReplyList',
   components: {
-    CommentList
+    CommentList,
+    WriteComment
   },
   props: {
     value: {
@@ -28,6 +31,10 @@ export default {
       default: false
     },
     commentId: {
+      type: [Number, String]
+    },
+    // 父组件article index.vue 的articleId 传了过来 它又把id 传给了发布评论的组件（相当于爷爷传给了父亲，父亲又传给了孩子）
+    articleId: {
       type: [Number, String]
     }
   },
