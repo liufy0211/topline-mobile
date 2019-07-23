@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>html5-文件读取</title>
+</head>
+
+<body>
+  <div>
+      <!-- 
+          src 文件路径
+          字符串
+            X 123
+            X abc
+          base64 编码格式的字符串 src传一个base64编码格式的字符串 依然可以把图片识别出来
+          浏览器html 有个api 能帮我们把用户选的图片文件，经过那个方法去处理，我们就得到了一坨这样的东西
+       -->
+    <img width="50" src="" id="img" alt="">
+  </div>
+  <div>
+      <!-- 首先要有一个file类型的input -->
+    <input type="file" id="file">
+  </div>
+  <script>
+    const oFile = document.querySelector('#file')
+    const oImg = document.querySelector('img')
+    // input 的改变事件
+    oFile.addEventListener('change', function (e) {
+        // 1.得到input 输入框用户所选的文件对象 e.target === oFile 事件函数里 this 就是DOM 本身 （e.target 得到DOM 本身 ）
+        // console.log(oFile.files[0]) 是input 的DOM 对象，DOM 对象有个属性files（只有file类型的input才有）  
+
+      const file = e.target.files[0]
+      // 在浏览器中读取文件 e.target.files[0]是用户选的那个文件
+      // fileReader 用来浏览器中读文件用的
+      const reader = new FileReader()
+      // 这个方法接收你选的那个文件对象 file类型的input
+      reader.readAsDataURL(file)
+      reader.addEventListener("load", function () {
+          // reader.result 获得读取结果 怎么拿到它的结果 要通过load 事件去拿 结果在reader.result 最后把结果传给你的后端
+        console.log(reader.result)
+        oImg.src = reader.result
+      }, false)
+    })
+  </script>
+</body>
+
+</html>
