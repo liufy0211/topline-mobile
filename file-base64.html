@@ -44,6 +44,8 @@
         oImg.src = reader.result
       }, false)
     })
+    // 图片能以字符串的形式存在，base64编码格式的字符串，浏览器提供了一个API 叫FileReader()构造函数，FileReader有个方法叫readAsDataURL(),这个方法接收你选的文件对象，file类型的input
+    // file类型的input的DOM有个属性叫file是个对象里面有个0，通过load事件去拿结果，结果在reader.result里面
   </script>
 </body>
 
