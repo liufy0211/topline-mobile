@@ -6,7 +6,23 @@
 
 <script>
 import io from ''
-
+/*
+    1.建立连接
+      发送与接收数据都是事件的形式（API的使用方式）
+      网络通信中一个核心概念术语： Socket（它就是个对象，建立连接之后拿到这个对象）
+    2.发送数据
+      WebSocket WebSocket.send(data)
+      socket.emit('消息类型'，数据体) 说白了给数据指定一个名字
+         消息类型说白了就好比 http 协议中的请求路径
+         这事 socket.io 封装之后的使用方式， 目的是为了区别不同的数据
+         消息类型都是后台指定的， 就好比接口路径一样，人家设计成什么，我们就怎么使用
+    3.接收数据
+      socket.on('消息类型'，数据体)
+      这个消息类型还是由后端指定的
+      一种方式就是后端完全主导，他说类型是什么你就怎么用
+      有的时候需要前端
+      socket.io('notify', 数据体)
+*/
 export default {
   name: 'ChatIndex',
   data () {
@@ -35,8 +51,13 @@ export default {
       // 参数1：消息的类型（服务端要求的）
       // 参数2：发送的数据（文本数据）
       // 参数3： 发送成功的回调
-      socket.emit('messgae', 'hello', function (data) {
-        console.log(data)
+
+      //   socket.emit('messgae', 'hello', function (data) {
+      //     console.log(data)
+      //   })
+      socket.emit('message', {
+        msg: 'hello',
+        timestamp: Date.now()
       })
     })
     // 触发message 事件调用
